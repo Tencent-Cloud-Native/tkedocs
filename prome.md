@@ -780,7 +780,6 @@ Grafana是一个用来展示各种各样数据的开源软件，通常情况下�
 
 我们通过右边的Axes完成对横纵坐标的配置，即为我们想要显示的数据选择合适的单位。
 ![enter image description here](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/km/1617024840_68_w790_h1778.png)
-
 在配置界面分Left Y(左Y轴)、Right Y(右Y轴)、X-Axis(X轴)。
 2个Y轴主要用于在一副图例上展示2种度量单位数据，用左/右Y轴来区分（该功能需结合Add series override使用），如左Y轴展示CPU使用百分比，右Y轴展示内存使用百分比。基础使用中我们可以关掉右Y轴。
 X轴默认是时间轴，表示数据按时间显示(例如，按小时或分钟分组)。除此之外还支持序列（Series）和直方图。
