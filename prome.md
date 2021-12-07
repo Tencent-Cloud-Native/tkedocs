@@ -49,7 +49,7 @@
 
 ## 基本概念
 
-###Time Series/Label
+### Time Series/Label
 
 Time Series(后边直接称Series) 表示一条随时间变化的曲线，横坐标是时间，纵坐标是该时间的数值。
 
@@ -96,10 +96,12 @@ Prometheus最常用的方式是pull，即周期性的去监控对象那里拉数
 
 #### Counter
 Counter就是一个非负递增值，只增不减，适用于例如总请求数这类指标，我们在查询的时候，可以通过查询语句，在Counter的数据上计算出增长率等。
+
 ![image-20211207094142027](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211207094142027.png)
 
 #### Gauge
 Gauge没啥限制，可增可减，适用于例如内存使用量这种指标。
+
 ![image-20211207094153129](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211207094153129.png)
 
 #### Histogram
@@ -109,7 +111,8 @@ Histogram是桶统计类型，它会自动将你定时的指标变成3个指标�
 * a_count表示打点次数
 
 ![image-20211207094200792](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211207094200792.png)
-#### Summary
+
+### Summary
 Summary是百分位统计类型，会在客户端对于一段时间内（默认是10分钟）的每个采样点进行统计，并形成分位图。
 它也会生成3个指标，例如你指定一个Summary叫a，那就会生成
 * a{quantile="0.99"} p99百分位数，这个0.99是定义指标时指定的，可以指定好几个。
@@ -117,6 +120,7 @@ Summary是百分位统计类型，会在客户端对于一段时间内（默认�
 * a_count表示打点次数
 
 ![image-20211207094208776](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211207094208776.png)
+
 ### 提供Pull接口(go为例)
 
 Prometheus的被监控对象采用Http接口来暴露设计好的指标。
@@ -126,6 +130,7 @@ Prometheus提供了lib用于在代码中定义指标，打点，暴露采集接�
 >https://github.com/prometheus/client_golang/blob/master/examples/random/main.go
 >在代码里生成指标只要做3步。
 1. ![image-20211207094232514](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211207094232514.png)
+
 2. **暴露/metrics接口**
 ![image-20211207094246871](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211207094246871.png)
 
@@ -196,6 +201,7 @@ scrape_configs:
 Target就是采集对象，他的信息表现为一系列label的集合，服务发现类型不同，Target的label集合也不同，具体需要去官方文档查，但实际上记住一些最常用的就行。
 
 例如如果用k8s服务发现去监控Pod，Prometheus会把每个Pod的每个Container变成包含以下label集合的Target，注意，是每个人Pod的每个Container是一个Target（可以指定namespace)。
+
 ![image-20211207094320742](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211207094320742.png)
 
 #### Target的特殊label
@@ -205,6 +211,7 @@ Target就是采集对象，他的信息表现为一系列label的集合，服务
 * ```__scheme__```:这个是采集用的协议，默认是http，如果配置文件里设置了，就会用配置文件里的。
 * ```__metrics_path__```:这个是采集用的path，默认是/metrics，如果配置文件里配了，就会用配置文件里的。
 > 注意：Prometheus最终真正发起采集的时候，用的是上边这几个label的值来作为真正请求的参数，而不是配置文件里写的，也就是说，只要改这些值，就可以改变最终请求的动作，比如，如果改了某个Target的```__address___```,那请求的url就变了，我们可以通过relabel_config来做这些事。
+
 ![image-20211130123103103](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211130123103103.png)
 
 #### 过滤Target
@@ -357,7 +364,7 @@ scrape_configs:
 
 前面我们介绍了采集对象(Target)的概念，以及如何通过服务发现和relabel来过滤出，那如果判断我们的配置是生效，且采集是正常的呢？
 
-###  查看up指标
+### 查看up指标
 
 最简单的方式是查一下某个你暴露的指标，有数据就说明采集成功了，如果没有数据，那就可以先看一个特殊的指标```up```。
 
@@ -502,9 +509,9 @@ Range vector也可以表示成一张二维表，只不过需要把时间戳也�
 
 | __name__  | node  | cpu  | value | timestamp |
 | :-------: | :---: | :--: | :---: | :-------: |
-| cpu_usage | node0 | cpu0 |  1.1  | 00:00:00  |
-| cpu_usage | node0 | cpu0 |   2   | 00:00:01  |
-| cpu_usage | node1 | cpu0 |   3   | 00:00:00  |
+| cpu_usage | node0 | cpu0 |  1.1  | `00:00:00`  |
+| cpu_usage | node0 | cpu0 |   2   | `00:00:01`  |
+| cpu_usage | node1 | cpu0 |   3   | `00:00:00`  |
 
 ```
 Tip:
@@ -695,9 +702,7 @@ GFT /api/v1/range_query?query=查询语句
 
 > 注意，它的核心原理是对给定时间范围内每个时间点，都执行一下查询语句，得到一段时间的Instant vector集合，所以range_query的查询语句结果只能是Instant vector或者Scalar，不能是Range vector。所以是不能输入类似cpu{}[1m]这类语句的，要通过前面介绍的聚合，聚成Instant vector或者Scalar。
 
-
 ![image-20211130211013366](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211130211013366.png)
-
 
 
 ## 最佳实践
@@ -743,6 +748,7 @@ groups:
 我们在前面提到过`honor_timestamps`，这个配置项用于Prometheus去决定要不要采纳上报上来的时间戳的，同时我们提到如果设置为`true`会收到`Staleness`机制的影响，那什么是`Staleness`呢？它对查询有啥影响呢？
 
 我们假设查询的是`T1`时刻的Instant vector，那Series最后一个点的时间戳相距离`T1`多久能被认为属于这个Instant vector呢？
+
 ![image-20211201114040085](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211201114040085.png)
 
 默认情况下是`5m`，也就是Prometheus会找`5m`内最后一个点，作为这次Intant vector的结果，但是这不就有个问题了吗，如果我有个Series最后一次上报是`4m`前，我现在也能查到数据了？更甚者，我`sum`一下也会把`4m`前的数据也给算进去，延迟也太大了吧。所以，Prometheus加了`Staleness mark`。
@@ -767,7 +773,9 @@ Grafana是一个用来展示各种各样数据的开源软件，通常情况下�
 ### 查询语句
 
 每个面板都提供一个QueryEditor，我们可以通过在下图红色框内编写语句来控制面板展示不同的图表。
+
 ![enter image description here](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/km/1617021757_86_w2716_h776.png)
+
 在上一小节我们介绍了PromQL的相关内容，这里就要用到啦，在红框内我们通过输入PromQL语句查询面板内想要显示的的内容。
 支持在同一个面板内添加多个Query。
 
@@ -779,7 +787,9 @@ Grafana是一个用来展示各种各样数据的开源软件，通常情况下�
 ### 设置单位
 
 我们通过右边的Axes完成对横纵坐标的配置，即为我们想要显示的数据选择合适的单位。
+
 ![enter image description here](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/km/1617024840_68_w790_h1778.png)
+
 在配置界面分Left Y(左Y轴)、Right Y(右Y轴)、X-Axis(X轴)。
 2个Y轴主要用于在一副图例上展示2种度量单位数据，用左/右Y轴来区分（该功能需结合Add series override使用），如左Y轴展示CPU使用百分比，右Y轴展示内存使用百分比。基础使用中我们可以关掉右Y轴。
 X轴默认是时间轴，表示数据按时间显示(例如，按小时或分钟分组)。除此之外还支持序列（Series）和直方图。
