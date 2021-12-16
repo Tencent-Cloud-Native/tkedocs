@@ -188,7 +188,7 @@ scrape_configs:
   metric_relabel_configs: # 4. 针对采集过来的指标，进行lable的添加修改，也可以根据label过滤掉一些指标
    ...
 ```
-### 采集对象(Target)核心概念
+### 采集对象(Target)核心概念
 
 在学习服务发现之前，我们先学习一下采集对象(Target)到底是啥，以及如何过滤出我们想要的Target，这是使用服务发现的前提。
 #### 什么是Target
