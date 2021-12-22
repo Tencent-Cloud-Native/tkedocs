@@ -13,10 +13,24 @@
   <script>
     window.$docsify = {
       name: '',
-      repo: ''
+      repo: '',
+      plugins: [
+        EditOnGithubPlugin.create(
+          'https://github.com/Tencent-Cloud-Native/tkedocs/blob/master',
+          null,
+          function(file) {
+            if (file.indexOf('en') === -1) {
+              return '编辑'
+            } else {
+              return 'edit on git'
+            }
+          }
+        )
+    ]
     }
   </script>
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
 </body>
 </html>
