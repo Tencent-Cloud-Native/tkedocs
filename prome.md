@@ -7,7 +7,7 @@
 
 
 # 序
-欢迎大家给此文档提issue[github](https://github.com/Tencent-Cloud-Native/tkedocs/issues)
+欢迎大家给此文档提issue  [github](https://github.com/Tencent-Cloud-Native/tkedocs/issues)
 
 无论你是运维，还是开发，为自己的业务配置面板和告警来监控程序的运行状况算是职业必备技能了。
 
