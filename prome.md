@@ -108,7 +108,7 @@ Histogram是桶统计类型，它会自动将你定时的指标变成3个指标�
 
 ![image-20211207094200792](https://hackweek-1251009918.cos.ap-shanghai.myqcloud.com/tke/P%2BG.assets/image-20211207094200792.png)
 
-### Summary
+#### Summary
 Summary是百分位统计类型，会在客户端对于一段时间内（默认是10分钟）的每个采样点进行统计，并形成分位图。
 它也会生成3个指标，例如你指定一个Summary叫a，那就会生成
 * a{quantile="0.99"} p99百分位数，这个0.99是定义指标时指定的，可以指定好几个。
